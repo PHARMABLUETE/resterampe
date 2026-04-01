@@ -53,7 +53,23 @@ resterampe/
 ## Secrets
 Liegen in `secrets/` (lokal) oder als `.env.local` in `dashboard/` – niemals in Git!
 
+## n8n Webhooks
+- `GET  https://automation.pharmabluete.de/webhook/resterampe-data`    → Produkte aus DB
+- `POST https://automation.pharmabluete.de/webhook/resterampe-refresh` → Sync triggern
+
+## n8n Credentials
+- Shopware OAuth2: `DmONQ5tXOAd4QB9b`
+- PostgreSQL shopware: `0dXOUxRF1iiYhAV8`
+- Workflow ID: `C6p1MDeFR2HN9Nm7`
+
 ## Wichtige URLs
 - n8n: https://automation.pharmabluete.de
 - pgAdmin: https://db.pharmabluete.de
 - Shopware: https://pharmabluete-mainz.de
+- GitHub: https://github.com/PHARMABLUETE/resterampe
+
+## Nächster Schritt
+Coolify Deployment:
+- Repo: PHARMABLUETE/resterampe, Base Dir: dashboard/
+- Env Vars: N8N_DATA_URL + N8N_WEBHOOK_URL
+- Port: 3000
