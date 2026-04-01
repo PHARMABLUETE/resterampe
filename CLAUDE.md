@@ -68,8 +68,21 @@ Liegen in `secrets/` (lokal) oder als `.env.local` in `dashboard/` – niemals i
 - Shopware: https://pharmabluete-mainz.de
 - GitHub: https://github.com/PHARMABLUETE/resterampe
 
-## Nächster Schritt
-Coolify Deployment:
-- Repo: PHARMABLUETE/resterampe, Base Dir: dashboard/
-- Env Vars: N8N_DATA_URL + N8N_WEBHOOK_URL
-- Port: 3000
+## Deployment (Stand 2026-04-01)
+
+**Live:** https://lagerverwaltung.t3rp.de
+
+- **Coolify App UUID:** `xu1rr1ea2doa0dzj1yxj89jl`
+- **Host-Port:** `3001:3000` (Workaround solange Traefik nicht läuft)
+- **Caddy-Eintrag:** `lagerverwaltung.t3rp.de → reverse_proxy 172.18.0.1:3001`
+- **Caddyfile:** `/root/n8n-docker-caddy/caddy_config/Caddyfile`
+
+### iptables-Regel (nicht persistent!)
+Damit Caddy den Host-Port 3001 erreicht:
+```bash
+iptables -I INPUT -i br-1c77be0fa43c -p tcp --dport 3001 -j ACCEPT
+```
+→ Muss nach Server-Neustart neu gesetzt werden. Dauerlösung: Phase 2 (n8n-Stack in Coolify → Traefik übernimmt).
+
+### Coolify Auto-Deploy
+Jeder Push auf `main` triggert automatisch Redeploy. Container-IP ändert sich dabei, aber Host-Port 3001 bleibt stabil → Caddy-Config bleibt unverändert.
