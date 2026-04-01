@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "n8n-mcp": {
+      "command": "npx",
+      "args": ["-y", "@czlonkowski/n8n-mcp@latest"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "N8N_BASE_URL": "https://automation.pharmabluete.de",
+        "N8N_API_KEY": "DEIN_N8N_API_KEY_HIER"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+# Secrets & lokale Config
+.env.local
+.env
+.mcp.json
+secrets/
+
+# Next.js
+dashboard/.next/
+dashboard/node_modules/
+dashboard/.env.local
+
+# macOS
+.DS_Store
