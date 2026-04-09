@@ -21,23 +21,37 @@ export default function Home() {
   const [refreshing, setRefreshing] = useState(false);
   const [lastSynced, setLastSynced] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   async function loadProducts() {
-    const res = await fetch('/api/products');
-    const data = await res.json();
-    setProducts(data);
-    if (data.length > 0) {
-      setLastSynced(data[0].last_synced);
+    try {
+      const res = await fetch('/api/products');
+      const data = await res.json();
+      if (!Array.isArray(data)) {
+        setError('Daten konnten nicht geladen werden – bitte Seite neu laden');
+        return;
+      }
+      setError(null);
+      setProducts(data);
+      if (data.length > 0) {
+        setLastSynced(data[0].last_synced);
+      }
+    } catch {
+      setError('Verbindungsfehler – bitte Seite neu laden');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   async function handleRefresh() {
     setRefreshing(true);
     await fetch('/api/refresh', { method: 'POST' });
-    // Kurz warten damit n8n Zeit zum Sync hat
-    await new Promise(r => setTimeout(r, 8000));
-    await loadProducts();
+    const before = lastSynced;
+    for (let i = 0; i < 10; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      await loadProducts();
+      if (lastSynced !== before) break;
+    }
     setRefreshing(false);
   }
 
@@ -109,7 +123,11 @@ export default function Home() {
 
       {/* Inhalt */}
       <main className="max-w-7xl mx-auto px-6 pb-8">
-        {loading ? (
+        {error ? (
+          <div className="text-center py-24 text-red-500">
+            {error}
+          </div>
+        ) : loading ? (
           <div className="flex items-center justify-center py-24 text-gray-400">
             <svg className="animate-spin h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
