@@ -86,3 +86,20 @@ iptables -I INPUT -i br-1c77be0fa43c -p tcp --dport 3001 -j ACCEPT
 
 ### Coolify Auto-Deploy
 Jeder Push auf `main` triggert automatisch Redeploy. Container-IP ändert sich dabei, aber Host-Port 3001 bleibt stabil → Caddy-Config bleibt unverändert.
+
+## Stabilisierungs-Fixes (2026-04-09)
+
+### n8n Workflow (v13, 13 Nodes)
+- **Retry:** Shopware HTTP Request hat 3 Retries (5s Pause) — temporäre API-Ausfälle überbrückt
+- **IF-Guard "Hat Produkte?":** vor dem DELETE-Node — leerer Sync lässt die DB unberührt
+- **Stale-Intervall:** 35 min → 2 Stunden — toleriert bis zu 3 aufeinanderfolgende Fehlschläge
+
+### Next.js Dashboard
+- `Array.isArray(data)`-Check verhindert Frontend-Crash wenn API Fehler zurückgibt
+- Error-State-Anzeige (roter Hinweis statt leerem Bildschirm)
+- Poll nach Refresh (alle 2s, max 20s) statt 8s-Hardcode
+- 15s Timeout auf `GET /api/products`, 30s auf `POST /api/refresh`
+
+### n8n API-Zugang
+- n8n Workflow direkt via REST API updatebar (API Key in `secrets/n8n.md`)
+- Lokales JSON `n8n/workflow_resterampe_v1.json` immer synchron mit Live-Stand halten
