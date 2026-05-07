@@ -1,5 +1,11 @@
 # Resterampe – Projekt-Dokumentation
 
+> **⚠️ ARCHIVIERT seit 2026-05-07.** Der Code wandert als Modul `inventory` in die SaaS-Plattform [t3rpsaas](../t3rpsaas/) (`app.t3rp.de/dashboard/inventory`). Hier KEINE neuen Commits mehr — bei Issues mit Drais-Inventory in t3rpsaas fixen.
+>
+> `lagerverwaltung.t3rp.de` (alte Coolify-App `xu1rr1ea2doa0dzj1yxj89jl`) bleibt bis ~2026-05-14 als Fallback online, dann deaktivieren.
+>
+> n8n-Workflow `resterampe_sync` (ID `C6p1MDeFR2HN9Nm7`) bleibt aktiv solange Fallback läuft. Der neue Workflow `inventory_shopware_drais` (ID `TWqvRN5yNPsJauuI`) schreibt parallel in `t3rpsaas.inventory_items`.
+
 ## Zweck
 Dashboard für PHARMABLÜTE-Mitarbeiter: Zeigt alle Shopware-Produkte mit Restbestand 1–49 Stück.
 Ziel: Mitarbeitern helfen, bei bestehenden Kundenbestellungen schnell die beste Alternative zu finden.
