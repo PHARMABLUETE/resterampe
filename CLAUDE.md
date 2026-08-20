@@ -6,6 +6,35 @@
 >
 > n8n-Workflow `resterampe_sync` (ID `C6p1MDeFR2HN9Nm7`) bleibt aktiv solange Fallback läuft. Der neue Workflow `inventory_shopware_drais` (ID `TWqvRN5yNPsJauuI`) schreibt parallel in `t3rpsaas.inventory_items`.
 
+## 🔚 FALLBACK IST FAKTISCH ABGESCHALTET (gemessen 2026-08-19/20)
+
+Beim Server-Neustart am **18.08.2026, 18:02 UTC** kam die App nicht wieder hoch. Damit ist der
+Zustand eingetreten, der ohnehin für Mai geplant war. **Kein Handlungsbedarf, kein Ausfall.**
+Gefunden nebenbei bei der Diagnose eines ERP-Ausfalls, siehe
+[schnittstelle_datenbank_microtech](../schnittstelle_datenbank_microtech/).
+
+Gemessener Stand auf `automation.pharmabluete.de`:
+
+| Prüfung | Ergebnis |
+|---|---|
+| `https://lagerverwaltung.t3rp.de` | **HTTP 503** |
+| Listener auf Host-Port 3001 | **keiner** |
+| Container zur App | **keiner vorhanden** |
+| n8n `resterampe_sync` | **inaktiv** (seit 07.05.) |
+
+**Drei Gründe, warum ein einfacher Neustart der App nicht mehr reichen würde:**
+1. Die iptables-Regel für Port 3001 ist weg. Sie war nie persistent, genau wie unten notiert.
+2. Das Bridge-Interface `br-1c77be0fa43c` aus der Regel unten **existiert nicht mehr**. Die
+   Bridges heißen jetzt `br-6d64a67ee42a` und `br-7ca6587e5229`.
+3. Der Caddy-Eintrag zeigt auf `172.18.0.1:3001`. Docker hat das Netz beim Neustart neu vergeben,
+   die Gateway-IP lautet jetzt `172.19.0.1`. Die alte Adresse läuft ins Timeout.
+
+**Was noch als Karteileiche herumliegt** (aufräumen, wenn du hier ohnehin bist):
+- Caddy-Eintrag `lagerverwaltung.t3rp.de` in `/root/n8n-docker-caddy/caddy_config/Caddyfile`
+- Coolify-App `xu1rr1ea2doa0dzj1yxj89jl`, falls noch angelegt
+- DNS-Eintrag für `lagerverwaltung.t3rp.de`
+- n8n-Workflow `resterampe_sync` ist inaktiv, aber **nicht archiviert**
+
 ## Zweck
 Dashboard für PHARMABLÜTE-Mitarbeiter: Zeigt alle Shopware-Produkte mit Restbestand 1–49 Stück.
 Ziel: Mitarbeitern helfen, bei bestehenden Kundenbestellungen schnell die beste Alternative zu finden.
